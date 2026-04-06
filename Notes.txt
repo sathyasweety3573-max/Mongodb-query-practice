@@ -1,0 +1,246 @@
+1.Find all the topics and tasks which are thought in the month of October
+
+db.topics.find({
+  date: {
+    $gte: new Date("2020-10-01"),
+    $lte: new Date("2020-10-31")
+  }
+})
+
+db.tasks.find({
+  date: {
+    $gte: new Date("2020-10-01"),
+    $lte: new Date("2020-10-31")
+  }
+})
+
+{
+    "_id" : ObjectId("69d22fbad6c37e035c485a35"),
+    "task" : "HTML Task",
+    "date" : ISODate("2020-10-10T00:00:00.000+0000"),
+    "submitted" : true,
+    "user_id" : NumberInt(1)
+}
+{
+    "_id" : ObjectId("69d22fbad6c37e035c485a36"),
+    "task" : "CSS Task",
+    "date" : ISODate("2020-10-20T00:00:00.000+0000"),
+    "submitted" : false,
+    "user_id" : NumberInt(2)
+}
+{
+    "_id" : ObjectId("69d23aa460f13d6e685504c2"),
+    "task" : "HTML Task",
+    "date" : ISODate("2020-10-10T00:00:00.000+0000"),
+    "submitted" : true,
+    "user_id" : NumberInt(1)
+}
+{
+    "_id" : ObjectId("69d23aa460f13d6e685504c3"),
+    "task" : "CSS Task",
+    "date" : ISODate("2020-10-20T00:00:00.000+0000"),
+    "submitted" : false,
+    "user_id" : NumberInt(2)
+}
+{
+    "_id" : ObjectId("69d2faad4fe0a07755441546"),
+    "task" : "HTML Task",
+    "date" : ISODate("2020-10-10T00:00:00.000+0000")
+}
+
+2.Find all the company drives which appeared between 15 oct-2020 and 31-oct-2020
+
+db.company_drives.find({
+  date: {
+    $gte: new Date("2020-10-15"),
+    $lte: new Date("2020-10-31")
+  }
+})
+{
+    "_id" : ObjectId("69d22ff1d6c37e035c485a3e"),
+    "company" : "TCS",
+    "date" : ISODate("2020-10-20T00:00:00.000+0000"),
+    "students" : [
+        NumberInt(1),
+        NumberInt(2)
+    ]
+}
+{
+    "_id" : ObjectId("69d22ff1d6c37e035c485a3f"),
+    "company" : "Infosys",
+    "date" : ISODate("2020-10-30T00:00:00.000+0000"),
+    "students" : [
+        NumberInt(2),
+        NumberInt(3)
+    ]
+}
+{
+    "_id" : ObjectId("69d23acd60f13d6e685504cb"),
+    "company" : "TCS",
+    "date" : ISODate("2020-10-20T00:00:00.000+0000"),
+    "students" : [
+        NumberInt(1),
+        NumberInt(2)
+    ]
+}
+{
+    "_id" : ObjectId("69d23acd60f13d6e685504cc"),
+    "company" : "Infosys",
+    "date" : ISODate("2020-10-30T00:00:00.000+0000"),
+    "students" : [
+        NumberInt(2),
+        NumberInt(3)
+    ]
+}
+{
+    "_id" : ObjectId("69d2fb984fe0a0775544159e"),
+    "company" : "TCS",
+    "date" : ISODate("2020-10-20T00:00:00.000+0000"),
+    "students" : [
+        NumberInt(1),
+        NumberInt(2)
+    ]
+}
+
+
+3.Find all the company drives and students who are appeared for the placement.
+
+
+db.company_drives.aggregate([
+  {
+    $lookup: {
+      from: "users",
+      localField: "students",
+      foreignField: "user_id",
+      as: "student_details"
+    }
+  }
+])
+
+   { "_id" : ObjectId("69d22ff1d6c37e035c485a3e"),
+    "company" : "TCS",
+    "date" : ISODate("2020-10-20T00:00:00.000+0000"),
+    "students" : [
+        NumberInt(1),
+        NumberInt(2)
+    ],
+    "student_details" : [
+        {
+            "_id" : ObjectId("69d22f2ed6c37e035c485a2c"),
+            "user_id" : NumberInt(1),
+            "name" : "Sathya",
+            "mentor_id" : NumberInt(101)
+        },
+        {
+            "_id" : ObjectId("69d22f2ed6c37e035c485a2d"),
+            "user_id" : NumberInt(2),
+            "name" : "Arun",
+            "mentor_id" : NumberInt(101)
+        },
+        {
+            "_id" : ObjectId("69d23647c845b6a4aabe8a09"),
+            "user_id" : NumberInt(1),
+            "name" : "Sathya",
+            "mentor_id" : NumberInt(101)
+        },
+        {
+            "_id" : ObjectId("69d23647c845b6a4aabe8a0a"),
+            "user_id" : NumberInt(2),
+            "name" : "Arun",
+            "mentor_id" : NumberInt(101)
+        },
+        {
+            "_id" : ObjectId("69d23a6d60f13d6e685504b9"),
+            "user_id" : NumberInt(1),
+            "name" : "Sathya",
+            "mentor_id" : NumberInt(101)
+        }]
+   }
+
+   4.Find the number of problems solved by the user in codekata
+
+   db.codekata.find()
+   {
+    "_id" : ObjectId("69d22fe1d6c37e035c485a3b"),
+    "user_id" : NumberInt(1),
+    "problems_solved" : NumberInt(50)
+}
+{
+    "_id" : ObjectId("69d22fe1d6c37e035c485a3c"),
+    "user_id" : NumberInt(2),
+    "problems_solved" : NumberInt(20)
+}
+{
+    "_id" : ObjectId("69d22fe1d6c37e035c485a3d"),
+    "user_id" : NumberInt(3),
+    "problems_solved" : NumberInt(70)
+}
+{
+    "_id" : ObjectId("69d23ac060f13d6e685504c8"),
+    "user_id" : NumberInt(1),
+    "problems_solved" : NumberInt(50)
+}
+{
+    "_id" : ObjectId("69d23ac060f13d6e685504c9"),
+    "user_id" : NumberInt(2),
+    "problems_solved" : NumberInt(20)
+}
+
+
+5.Find all the mentors with who has the mentee's count more than 15
+
+db.users.aggregate([
+  {
+    $group: {
+      _id: "$mentor_id",
+      mentee_count: { $sum: 1 }
+    }
+  },
+  {
+    $match: {
+      mentee_count: { $gt: 15 }
+    }
+  }
+])
+
+{
+    "_id" : NumberInt(101),
+    "mentee_count" : 24.0
+}
+
+6.Find the number of users who are absent and task is not submitted  between 15 oct-2020 and 31-oct-2020
+
+db.attendance.aggregate([
+  {
+    $match: {
+      date: {
+        $gte: new Date("2020-10-15"),
+        $lte: new Date("2020-10-31")
+      },
+      status: "absent"
+    }
+  },
+  {
+    $lookup: {
+      from: "task_submissions",
+      localField: "user_id",
+      foreignField: "user_id",
+      as: "task"
+    }
+  },
+  {
+    $unwind: "$task"
+  },
+  {
+    $match: {
+      "task.submitted": false
+    }
+  },
+  {
+    $count: "absent_and_not_submitted"
+  }
+])
+
+{
+    "absent_and_not_submitted" : NumberInt(36)
+}
